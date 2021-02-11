@@ -1,0 +1,63 @@
+{
+  "autorun": false,
+  "terminals": [
+    {
+      "name": "cypress open",
+      "focus": true,
+      "onlySingle": true,
+      "execute": true,
+      "command": "yarn cypress:open"
+    },
+    {
+      "name": "cypress run",
+      "focus": true,
+      "onlySingle": true,
+      "execute": false,
+      "command": "yarn cypress:run --project ../project"
+    },
+    {
+      "name": "packages/server test-watch",
+      "focus": true,
+      "onlySingle": true,
+      "execute": false,
+      "cwd": "[cwd]/packages/server",
+      "command": "yarn test-watch [file]"
+    },
+    {
+      "name": "packages/server test",
+      "focus": true,
+      "onlySingle": true,
+      "execute": false,
+      "cwd": "[cwd]/packages/server",
+      "command": "yarn test [file]"
+    },
+    {
+      "name": "packages/runner watch",
+      "focus": true,
+      "onlySingle": true,
+      "cwd": "[cwd]/packages/runner",
+      "command": "yarn watch"
+    },
+    {
+      "name": "packages/driver cypress open",
+      "focus": true,
+      "onlySingle": true,
+      "cwd": "[cwd]/packages/driver",
+      "command": "yarn cypress:open"
+    },
+    {
+      "name": "packages/desktop-gui cypress open",
+      "focus": true,
+      "onlySingle": true,
+      "cwd": "[cwd]/packages/desktop-gui",
+      "command": "yarn cypress:open"
+    },
+    {
+      "name": "packages/desktop-gui watch",
+      "focus": true,
+      "onlySingle": true,
+      "cwd": "[cwd]/packages/desktop-gui",
+      "command": "yarn watch"
+    }
+  ]
+}
