@@ -34,5 +34,8 @@ beforeEach(() => {
   indexedDB.deleteDatabase('shop')
   indexedDB.deleteDatabase('carts')
   cy.clearLocalStorage()
+  cy.on('uncaught:exception', (err, runnable) => {
+    return false
+  })
 })
 
