@@ -15,8 +15,10 @@ describe("Our first suite", () => {
         cy.url().should("eq", "https://ww2.tilemountain.co.uk/");
     })
     it("Category page", () =>{
-        const picked = Math.floor(Math.random()*7)+1
-        cy.get(`div.container ul.flex.menu li:nth-child(${picked}).sb-menu.nav-item.level0.nav-1.level-top.first.nav-item--parent.mega.nav-item--only-blocks.parent`).click()
+        // const picked = Math.floor(Math.random()*7)+1
+        // cy.get(`div.container ul.flex.menu li:nth-child(${picked}).sb-menu.nav-item.level0.nav-1.level-top.first.nav-item--parent.mega.nav-item--only-blocks.parent`).click()
+        const picked = Math.floor(Math.random()*5)+1
+        cy.get(`div.familiar-brands div.row.center-xs a:nth-child(${picked}).brand-detail.col-lg-4.col-md-4.col-sm-6.col-xs-12`).click()
         cy.wait(6000)
         categoryPage = cy.url
     })
@@ -103,6 +105,26 @@ describe("Our first suite", () => {
         cy.get('@Mobile').type('123456789')
 
         // Delivery Date Box
-        cy.get('div.calendar-box div.vc-weeks div.vc-grid-cell div span').should('not.have.class','vc-text-gray-400')
+        // cy.get('div.calendar-box div.vc-grid-container.vc-weeks div.vc-grid-cell').should(($lenght) =>{
+        //     var classList = Array.from($lenght[0].classList);
+        //     console.log('lenght',classList)
+        //     return $("$lenght.classList:not(.vc-grid-cell-col-1.vc-grid-cell-col-7)")
+        // })
+        
+        // .vc-grid-cell-col--7
+        // .vc-grid-cell-col--1
+        // .should('equal.to', 'vc-grid-cell-col-7')
+        // .and('not.have', '.vc-grid-cell-col-1').then(() => {
+        //     cy.get('div.vc-h-full').should('not.have', '.vc-opacity-0').and('not.have', '.vc-pointer-events-none').then(() => {
+
+        //     })
+        // })
+
+        // cy.get('div.calendar-box div.vc-weeks div.vc-grid-cell div.vc-h-full span[class="vc-day-content vc-focusable vc-font-medium vc-text-sm vc-cursor-pointer focus:vc-font-bold vc-rounded-full"]').should('not.have', '.vc-text-gray-400').as('deliveryDates')
+        // cy.get('div.calendar-box div.vc-weeks').should('satisfy', ($el) =>{
+        //     const classList = Array.from($el[0].classList)
+        //     console.log('classList', classList)
+        //     classList
+        // })
     })
 })
