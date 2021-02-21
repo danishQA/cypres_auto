@@ -3,11 +3,11 @@ describe("Our first suite", () => {
         return Math.round(Math.random() * (number-1) +1)
       }
     let categoryPage = ''
-    // beforeEach(() => {
-    //     Cypress.on('uncaught:exception', (err, runnable) => {
-    //         return false
-    //       })
-    // })
+    beforeEach(() => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            return false
+          })
+    })
     it("open application", () => {
       cy.visit("/")
     })
@@ -105,6 +105,11 @@ describe("Our first suite", () => {
         cy.get('@Mobile').type('123456789')
 
         // Delivery Date Box
+
+        cy.get('div.calendar-box div.vc-grid-container.vc-weeks div.vc-grid-cell').not('.vc-grid-cell-col-7').not('.vc-grid-cell-col-1').as('workingDays')
+        cy.get('@workingDays').find('div.vc-h-full').not('.vc-opacity-0').not('.vc-pointer-events-none').as('days')
+        cy.get('@days').find('span').not('.vc-text-gray-400')
+
         // cy.get('div.calendar-box div.vc-grid-container.vc-weeks div.vc-grid-cell').should(($lenght) =>{
         //     var classList = Array.from($lenght[0].classList);
         //     console.log('lenght',classList)
