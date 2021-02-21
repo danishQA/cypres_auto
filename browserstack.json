@@ -1,0 +1,29 @@
+{
+  "auth": {
+    "username": "danishahmed4",
+    "access_key": "RjXYS5YZ3zvGxphhn7Qf"
+  },
+  "browsers": [{
+      "browser": "chrome",
+      "os": "Windows 10",
+      "versions": ["latest", "latest - 1"]
+    },
+    {
+      "browser": "firefox",
+      "os": "OS X Mojave",
+      "versions": ["latest", "latest - 1"]
+    },
+    {
+      "browser": "edge",
+      "os": "OS X Catalina",
+      "versions": ["latest"]
+    }
+  ],
+  "run_settings": {
+    "cypress_config_file": "./cypress.json",
+    "cypress_version": "6",
+    "project_name": "My sandbox project",
+    "build_name": "Build no. 1",
+    "parallels": "5"
+  }
+}

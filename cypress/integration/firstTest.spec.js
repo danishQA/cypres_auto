@@ -19,7 +19,11 @@ describe("SignIn Test Cases", () => {
         cy.get('@email').click()
         cy.get('@password').click()
   });
-
+  it("Check all Signin Fields", () => {
+    // 2nd CASE
+        cy.get('@email').click()
+        cy.get('@password').click()
+  });
 });
 
 //         //   4th case
