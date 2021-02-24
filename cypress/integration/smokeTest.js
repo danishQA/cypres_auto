@@ -105,26 +105,21 @@ describe("Our first suite", () => {
         cy.get('@Mobile').type('123456789')
 
         // Delivery Date Box
-        // cy.get('div.calendar-box div.vc-grid-container.vc-weeks div.vc-grid-cell').should(($lenght) =>{
-        //     var classList = Array.from($lenght[0].classList);
-        //     console.log('lenght',classList)
-        //     return $("$lenght.classList:not(.vc-grid-cell-col-1.vc-grid-cell-col-7)")
-        // })
-        
-        // .vc-grid-cell-col--7
-        // .vc-grid-cell-col--1
-        // .should('equal.to', 'vc-grid-cell-col-7')
-        // .and('not.have', '.vc-grid-cell-col-1').then(() => {
-        //     cy.get('div.vc-h-full').should('not.have', '.vc-opacity-0').and('not.have', '.vc-pointer-events-none').then(() => {
+        cy.get('div.calendar-box div.vc-grid-container.vc-weeks div.vc-grid-cell').not('.vc-grid-cell-col--1').not('.vc-grid-cell-col--7').then(mainDiv =>{
+            cy.get(mainDiv).find('div.vc-h-full').not('.vc-opacity-0').not('.vc-pointer-events-none').then(innerDiv => {
+                var randomDeliveryDate
+                cy.get(innerDiv).find('span.vc-day-content').not('.vc-text-gray-400').then(span =>{
+                    
+                    cy.get(span).its('length').should('be.gt', 0).then($lenght =>{
+                        randomDeliveryDate = randomGenerator($lenght) - 1
+                        console.log($lenght);
+                        cy.get(span[randomDeliveryDate]).click()
+                        cy.wait(2000)
+                    })
 
-        //     })
-        // })
-
-        // cy.get('div.calendar-box div.vc-weeks div.vc-grid-cell div.vc-h-full span[class="vc-day-content vc-focusable vc-font-medium vc-text-sm vc-cursor-pointer focus:vc-font-bold vc-rounded-full"]').should('not.have', '.vc-text-gray-400').as('deliveryDates')
-        // cy.get('div.calendar-box div.vc-weeks').should('satisfy', ($el) =>{
-        //     const classList = Array.from($el[0].classList)
-        //     console.log('classList', classList)
-        //     classList
-        // })
+                })
+                
+            })
+        })
     })
 })
