@@ -3,11 +3,11 @@ describe("Our first suite", () => {
         return Math.round(Math.random() * (number-1) +1)
       }
     let categoryPage = ''
-    // beforeEach(() => {
-    //     Cypress.on('uncaught:exception', (err, runnable) => {
-    //         return false
-    //       })
-    // })
+    beforeEach(() => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            return false
+          })
+    })
     it("open application", () => {
       cy.visit("/")
     })
