@@ -86,7 +86,7 @@ describe("Our first suite", () => {
         cy.get('@lastName').type('ahmed')
 
         cy.get('div.personal-details.line.relative input[name="email-address"]').as('emailAddress')
-        cy.get('@lastName').type('danish.ahmed@ki5.co.uk')
+        cy.get('@emailAddress').type('danish.ahmed@ki5.co.uk')
 
         // Billing Details
         cy.get('div.pt20.billing-details input#search-bar').as('Postcode')
@@ -114,12 +114,20 @@ describe("Our first suite", () => {
                         randomDeliveryDate = randomGenerator($lenght) - 1
                         console.log($lenght);
                         cy.get(span[randomDeliveryDate]).click()
-                        cy.wait(2000)
                     })
-
-                })
-                
+                })     
             })
+        }).then(() => {
+        // Confirm Delivery
+        cy.get('button#shippingSubmitBtnId').contains('Confirm Delivery:').click().then(() => {
+            cy.wait(1000)
+            cy.get('label').contains('Debit or Credit Card').find('span.checkmark.black-border-checkmark.allunchecked').click().then(() =>{
+                cy.wait(1000)
+                cy.get('form#payment-form iframe#singleIframe').its('0.contentDocument.body').should('not.be.empty').then(cy.wrap).then(wrapped => {
+                    cy.get(wrapped).wait(1000).find('input#checkout-frames-card-number').type('4242424242424242')
+                })
+            })
+        })
         })
     })
 })

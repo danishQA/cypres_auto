@@ -7,5 +7,6 @@
     "supportFile": "cypress/support/index.js",
     "viewportWidth": 1280,
     "viewportHeight": 1024,
-    "projectId": "iozbur"
+    "projectId": "iozbur",
+    "chromeWebSecurity": false
   }
