@@ -10,9 +10,11 @@ describe("Our first suite", () => {
     })
     it("open application", () => {
       cy.visit("/")
+      cy.clearCookies()
+      cy.reload()
     })
     it("successfully loads Homepage", () => {
-        cy.url().should("eq", "https://ww2.tilemountain.co.uk/");
+        cy.url().should("eq", "http://178.62.80.156/");
     })
     it("Category page", () =>{
         // const picked = Math.floor(Math.random()*7)+1
@@ -69,7 +71,7 @@ describe("Our first suite", () => {
         cy.get('div.mw-100 div.col-xs-12.col-md-9.check-btn').contains('View Basket').click()
         })
         cy.wait(2000)
-        cy.url().should('eq','https://ww2.tilemountain.co.uk/cart')
+        cy.url().should('eq','http://178.62.80.156/cart')
     })
     it('To Checkout page', () => {
         cy.get('a')
@@ -118,16 +120,47 @@ describe("Our first suite", () => {
                 })     
             })
         }).then(() => {
-        // Confirm Delivery
-        cy.get('button#shippingSubmitBtnId').contains('Confirm Delivery:').click().then(() => {
-            cy.wait(1000)
+
+            // Confirm Delivery
+            cy.get('button#shippingSubmitBtnId').contains('Confirm Delivery:').click().then(() => {
+                cy.wait(1000)
+            })
+
+            // Debit or Credit Card Payment Method
             cy.get('label').contains('Debit or Credit Card').find('span.checkmark.black-border-checkmark.allunchecked').click().then(() =>{
                 cy.wait(1000)
                 cy.get('form#payment-form iframe#singleIframe').its('0.contentDocument.body').should('not.be.empty').then(cy.wrap).then(wrapped => {
-                    cy.get(wrapped).wait(1000).find('input#checkout-frames-card-number').type('4242424242424242')
+                    cy.get(wrapped).find('input#checkout-frames-card-number').type('4242424242424242').then(() => {
+                        cy.get(wrapped).find('input#checkout-frames-expiry-date').type('0128')
+                        cy.get(wrapped).find('input#checkout-frames-cvv').type('100')
+                    })
                 })
-            })
-        })
+            }).then(() => {
+                cy.get('div.cart-bottom-detail-inner').click().then(()=>{
+                    // cy.server()
+                    // cy.route('https://3ds2-sandbox.ckotech.co/interceptor/*/device-information').as('checkoutCom')
+                    // cy.wait('@checkoutCom')
+                    cy.wait(16000)
+                    cy.get('iframe[name="cko-3ds2-iframe"]').its('0.contentDocument.body').should('not.be.empty').then(cy.wrap).then(wrapped => {
+                        cy.get(wrapped).find('input#password').type('Checkout1!')
+                        cy.get(wrapped).find('input#txtButton').contains('Continue').click()
+                    // cy.wait(12000)
+                    // cy.route('https://3ds2-sandbox.ckotech.co/interceptor/*/device-information').then(() => {
+                        // cy.get('input#password').type('Checkout1!')
+                        // cy.get('input#txtButton').contains('Continue').click()
+                    // })
+                    }).then(() => {
+
+                        // Success page
+                        cy.wait(6000)
+                        cy.location('href').should('contains', '/success?cko-session-id')
+                    })
+                })
+            })  
         })
     })
+    // it('Success Page',() =>{
+    //     cy.wait(3000)
+    //     cy.location().should('contains', 'success?cko-session-id')
+    // })
 })
