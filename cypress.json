@@ -1,5 +1,5 @@
 {
-    "baseUrl": "https://ww2.tilemountain.co.uk",
+    "baseUrl": "http://178.62.80.156",
     "ignoreTestFiles" : "**/examples/*",
     "fixturesFolder": "cypress/fixtures",
     "integrationFolder": "cypress/integration",
@@ -8,5 +8,7 @@
     "viewportWidth": 1280,
     "viewportHeight": 1024,
     "projectId": "iozbur",
-    "chromeWebSecurity": false
+    "chromeWebSecurity": false,
+    "defaultCommandTimeout": 6000,
+    "pageLoadTimeout": 80000
   }
