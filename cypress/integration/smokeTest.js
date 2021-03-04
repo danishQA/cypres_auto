@@ -43,6 +43,7 @@ describe("Our first suite", () => {
             .and('not.contain', 'More Stock Due */*/*')
             .then(($span) =>{
                     cy.get('div.tile-quantity input').should('have.class', 'm0 no-outline base-input-number__input brdr-cl-primary bg-cl-transparent h4').as('m2')
+                    cy.wait(1000)
                     cy.get('@m2').type('1')
                     cy.get('button').contains('Add to basket').as('AddtoBasket')
                     cy.get('@AddtoBasket').click()
@@ -95,7 +96,7 @@ describe("Our first suite", () => {
         cy.get('@Postcode').type('ST6 4JU')
 
         cy.get('div.pt20.billing-details button#find-address').contains('Find Address').click().then(() => {
-            cy.wait(1000)
+            cy.wait(6000)
             cy.get('div#crafty_postcode_result_display_1 select#crafty_postcode_lookup_result_option1').as('AddressLookup')
             cy.get('@AddressLookup').select('TILE MOUNTAIN SHOWROOM, Brownhills Road, STOKE-ON-TRENT')
         })
@@ -152,8 +153,9 @@ describe("Our first suite", () => {
                     }).then(() => {
 
                         // Success page
-                        cy.wait(6000)
+                        cy.wait(25000)
                         cy.location('href').should('contains', '/success?cko-session-id')
+                        cy.get('div.success-header')
                     })
                 })
             })  
