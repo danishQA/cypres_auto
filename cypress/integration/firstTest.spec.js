@@ -1,29 +1,49 @@
-const { navigateTo } = require("../support/page_objects/navigationPage");
+const { SignInPage } = require("../support/page_objects/navigationPage");
 
 describe("SignIn Test Cases", () => {
-  beforeEach("Check all Signin Fields", () => {
+  before("Check all Signin Fields", () => {
     cy.visit('/')
-    navigateTo.AccountPage();
-  });
+    SignInPage.loginPage()
 
-  it("Check all Signin Fields", () => {
+  });
+  beforeEach("Reload account Page", () => {
+    cy.reload()
+    SignInPage.findInputfields();
+  })
+
+  it("Empty Fields messages and login", () => {
     // 1st CASE
         cy.get('@email').click()
         cy.get('@password').click()
+        .then(() => {
+        cy.get('@emailMessage').find('span').invoke('text')
+        .should('include', 'Field is required')
+      })
         cy.get('@checkBox').check()
-        cy.get('@login').click()
+        .then(() => {
+          cy.get('@passwordMessage').find('span').invoke('text')
+          .should('include', 'Field is required')
+        })
+        SignInPage.login()
+        .then(()=>{
+          SignInPage.NotificationErrorLogin()
+        })
   });
 
-  it("Check all Signin Fields", () => {
     // 2nd CASE
-        cy.get('@email').click()
-        cy.get('@password').click()
+  it("123 in Email & Password empty", () => {
+        cy.get('@email').type('123')
+        SignInPage.login().then(() => {
+          SignInPage.NotificationErrorLogin()
+          cy.get('@emailMessage').find('span').invoke('text')
+        .should('include', 'Please provide valid e-mail address.')
+        })
   });
-  it("Check all Signin Fields", () => {
-    // 2nd CASE
-        cy.get('@email').click()
-        cy.get('@password').click()
-  });
+  // it("Check all Signin Fields", () => {
+  //   // 2nd CASE
+  //       cy.get('@email').click()
+  //       cy.get('@password').click()
+  // });
 });
 
 //         //   4th case
