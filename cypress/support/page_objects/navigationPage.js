@@ -46,6 +46,10 @@ function NotificationErrorLogin() {
     cy.get(popup).find('div#notificationAction1').contains('OK').click()
   })
 }
+
+function successLoginPage(){
+  return cy.get('')
+}
 export class SigninPage {
   loginPage(){
     return loginPage('a[href="/customer/account/login"]');
