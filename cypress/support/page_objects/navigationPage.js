@@ -34,10 +34,11 @@ function findInputfields(formName) {
 
 function login() {
   console.log('test')
-  return cy.get("button").should("have.attr", "type", "button").contains("Login").click()
-  .then(($test) => {
-    return $test
-  })
+  return cy.get('form[novalidate="novalidate"]').submit()
+  // return cy.get("button").should("have.attr", "type", "button").contains("Login").click()
+  // .then(($test) => {
+  //   return $test
+  // })
 }
 
 function NotificationErrorLogin() {

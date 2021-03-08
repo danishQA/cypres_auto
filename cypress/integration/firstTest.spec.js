@@ -200,7 +200,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@password').type('Test@123')
     cy.get('@checkBox').uncheck()
     SignInPage.login().then(() => {
-      cy.expect(cy.get('div.familiar-brands div.row.center-xs a:nth-child(1)'))
+      cy.wait(5000)
       cy.get('div.notifications fixed div.message p20').as('LoginPopup')
       .invoke('text').should('include', 'You are logged in!')
       cy.url().should('eq','http://178.62.80.156/')
