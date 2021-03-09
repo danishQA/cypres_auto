@@ -3,11 +3,13 @@ const { SignInPage } = require("../support/page_objects/navigationPage");
 describe("SignIn Test Cases", () => {
   before("Check all Signin Fields", () => {
     cy.visit('/')
-    SignInPage.loginPage()
-
   });
   beforeEach("Reload account Page", () => {
+    if(console.log('test',(cy.url().then((url) =>{return url==='http://178.62.80.156/customer/account/login'})))){
     cy.reload()
+  } else{
+    SignInPage.loginPage()
+  }
     SignInPage.findInputfields();
   })
 
@@ -16,13 +18,11 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').click()
     cy.get('@password').click()
       .then(() => {
-        cy.get('@emailMessage').find('span').invoke('text')
-          .should('include', 'Field is required')
+        SignInPage.emptyEmailError()
       })
     cy.get('@checkBox').check()
       .then(() => {
-        cy.get('@passwordMessage').find('span').invoke('text')
-          .should('include', 'Field is required')
+        SignInPage.emptyPasswordError()
       })
     SignInPage.login()
       .then(() => {
@@ -35,8 +35,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('123')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 3rd CASE
@@ -44,8 +43,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('abc#.com')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 4th CASE
@@ -53,8 +51,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('@.com')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 5th CASE
@@ -63,8 +60,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@password').type('abc')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 6th CASE
@@ -73,8 +69,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@password').type('123')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 7th CASE
@@ -83,8 +78,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@password').type('123')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 8th CASE
@@ -93,8 +87,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@password').type('@.com')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.invalidEmailError()
     })
   });
   // 9th CASE
@@ -102,8 +95,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     SignInPage.login().then(() => {
       SignInPage.NotificationErrorLogin()
-      cy.get('@passwordMessage').find('span').invoke('text')
-        .should('include', 'Field is required.')
+      SignInPage.emptyPasswordError()
     })
   });
   // 10th CASE
@@ -111,7 +103,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('12345')
     SignInPage.login().then(() => {
-     cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 11th CASE
@@ -119,7 +111,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('1234567')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 12th CASE
@@ -127,7 +119,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('abcdefg')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 13th CASE
@@ -135,7 +127,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('abcd123')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 14th CASE
@@ -143,7 +135,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('abcd@123')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 15th CASE
@@ -151,7 +143,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('Testtest')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 16th CASE
@@ -159,7 +151,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('T123456')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 17th CASE
@@ -167,7 +159,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('test@123')
     SignInPage.login().then(() => {
-    cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 18th CASE
@@ -175,7 +167,7 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('#@,.$%^*')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 19th CASE
@@ -183,49 +175,43 @@ describe("SignIn Test Cases", () => {
     cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('Test$123')
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 20th CASE
   it("danish.ahmed@ki5.com.uk in Email & Password Test@123", () => {
     cy.get('@email').type('danish.ahmed@ki5.com.uk')
     cy.get('@password').type('Test@123')
+    cy.get('@checkBox').check()
     SignInPage.login().then(() => {
-      cy.url().should('eq','http://178.62.80.156/forgetpassword')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 21th CASE
-  it.only("danish.ahmed@ki5.co.uk in Email & Password Test@123 and unchecked (Login)", () => {
-    cy.get('@email').type('danish.ahmed@ki5.co.uk')
+  it("danish.ahmed@ki5.com.uk in Email & Password Test@123 and unchecked (Login)", () => {
+    cy.get('@email').type('danish.ahmed@ki5.com.uk')
     cy.get('@password').type('Test@123')
     cy.get('@checkBox').uncheck()
     SignInPage.login().then(() => {
-      cy.wait(5000)
-      cy.get('div.notifications fixed div.message p20').as('LoginPopup')
-      .invoke('text').should('include', 'You are logged in!')
-      cy.url().should('eq','http://178.62.80.156/')
+      SignInPage.forgotpasswordPage()
     })
   });
   // 22th CASE
-  it("danish.ahmed@ki5.co.uk.uk in Email & Password Test@123 and checked (Login)", () => {
-    cy.get('@email').type('danish.ahmed@ki5.co.uk.uk')
+  it("danish.ahmed@ki5.co.uk in Email & Password Test@123 and unchecked (Login)", () => {
+    cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('Test@123')
-    cy.get('@checkBox').check()
-    SignInPage.login().then(() => {
-      SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+    cy.get('@checkBox').uncheck()
+    SignInPage.login().then(() => {      
+      SignInPage.successLoginPage()
     })
   });
   // 23th CASE
-  it("abcd@gmail.co.uk in Email & Password Test@123", () => {
-    cy.get('@email').type('abcd@gmail.co.uk')
+  it("danish.ahmed@ki5.co.uk in Email & Password Test@123 and checked (Login)", () => {
+    cy.get('@email').type('danish.ahmed@ki5.co.uk')
     cy.get('@password').type('Test@123')
     cy.get('@checkBox').check()
     SignInPage.login().then(() => {
-      SignInPage.NotificationErrorLogin()
-      cy.get('@emailMessage').find('span').invoke('text')
-        .should('include', 'Please provide valid e-mail address.')
+      SignInPage.successLoginPage()
     })
   });
 })
