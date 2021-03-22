@@ -1,3 +1,6 @@
+const accountIcon = 'div[class="inline-flex relative dropdown"] a[href="/customer/account/login"]'
+const myAccount = 'div[class="inline-flex relative dropdown"] a[href="/my-account"]'
+
 const loginPage = ((loginpage) =>{
   return cy.get(loginpage)
     .click()
@@ -38,11 +41,11 @@ const findInputfields = ((formName) => {
 
 const login = (() => {
   console.log('test')
-  return cy.get('form[novalidate="novalidate"]').submit()
-  // return cy.get("button").should("have.attr", "type", "button").contains("Login").click()
-  // .then(($test) => {
-  //   return $test
-  // })
+  // return cy.get('form[novalidate="novalidate"]').submit()
+  return cy.get("button").should("have.attr", "type", "button").contains("Login").click()
+  .then(($test) => {
+    return $test
+  })
 })
 
 const emptyEmailError = (() =>{
@@ -68,18 +71,26 @@ const invalidEmailError = (() =>{
 })
 
 const forgotpasswordPage = (() =>{
-  cy.url().should('eq','http://178.62.80.156/forgetpassword')
+  cy.url().should('eq','https://ww2.tilemountain.co.uk/forgetpassword')
 })
 
 const successLoginPage = (() =>{
   cy.wait(3000)
   cy.get('div.notifications.fixed div.message.p20').as('LoginPopup')
   .invoke('text').should('include', 'You are logged in!')
-  cy.url().should('eq','http://178.62.80.156/')
+  cy.url().should('eq','https://ww2.tilemountain.co.uk/')
+})
+
+const logout = (() => {
+  cy.get(myAccount).trigger('mouseover').then((accountMenu) => {
+    cy.get('div#viewport div.py5.brdr-top-1.brdr-cl-bg-secondary a.no-underline.block.py10.px15').contains('Logout').click()
+    cy.wait(500)
+    cy.url().should('eq','https://ww2.tilemountain.co.uk')
+  })
 })
 export class SigninPage {
   loginPage(){
-    return loginPage('div[class="inline-flex relative dropdown"] a[href="/customer/account/login"]');
+    return loginPage(accountIcon);
   }
   findInputfields() {
     return findInputfields("form[novalidate]");
@@ -109,6 +120,9 @@ export class SigninPage {
   }
   successLoginPage(){
     return successLoginPage()
+  }
+  logout(){
+    logout(myAccount)
   }
 }
 
