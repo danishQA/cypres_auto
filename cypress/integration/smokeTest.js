@@ -127,6 +127,8 @@ describe("Our first suite", () => {
                 cy.wait(1000)
             })
 
+            // Cash on Delivery
+
             // Debit or Credit Card Payment Method
             cy.get('label').contains('Debit or Credit Card').find('span.checkmark.black-border-checkmark.allunchecked').click().then(() =>{
                 cy.wait(1000)
