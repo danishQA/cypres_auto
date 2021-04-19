@@ -21,5 +21,11 @@ describe("Our first suite", () => {
         cy.get(`ul.flex.menu li:nth-child(${picked}).sb-menu.nav-item.level0.nav-1.level-top.first.nav-item--parent.mega.nav-item--only-blocks.parent a.level-top.sb-forward`).click()
         cy.wait(6000)
     })
-    
+    it("Selecting Product on Sub Category page", () => {
+        cy.get('div#subcategory-list div div.col-sm-6.flex.col-lg-3.col-md-3.col-xs-6.sb-item').its('length').then(($lenght) => {
+            const listElementNumber = randomGenerator($lenght)
+            cy.get(`div.product-listing.row.m0.start-md div:nth-child(${listElementNumber})`).click()
+            cy.wait(6000)
+        })
+    })
 })
