@@ -1,129 +1,118 @@
-const accountIcon = 'div[class="inline-flex relative dropdown"] a[href="/customer/account/login"]'
-const myAccount = 'div[class="inline-flex relative dropdown"] a[href="/my-account"]'
 
-const loginPage = ((loginpage) =>{
-  return cy.get(loginpage)
-    .click()
-    .then(() => {
-      cy.url().should("include", "/customer/account/login");
-    });
+const visitHomepage = (() => {
+    cy.visit('/')
+    cy.wait(1000)
 })
 
-const findInputfields = ((formName) => {
-  return cy.get(formName).then( () => {
-    cy.get("div.relative.base-input.mb10.filldata input")
-      .should("have.attr", "type", "email")
-      .clear()
-      .as("email")
-    cy.get("div.relative.base-input.mb10.filldata div:nth-child(2)")
-    .not('.relative')
-    .as("emailMessage");
-    cy.get("div.relative.base-input.mb10.passwordbox label")
-    .as("passwordLabel")
-    cy.get("div.relative.base-input.mb10.passwordbox input")
-      .should("have.attr", "type", "password").clear()
-      .as("password")
-    cy.get("div.relative.base-input.mb10.passwordbox").as("passwordMessage");
-    cy.get("input#remember")
-      .should("have.attr", "type", "checkbox")
-      .as("checkBox")
-    cy.get("button")
-      .should("have.attr", "type", "button")
-      .contains("Login")
-      .as("login")
+const search = ((searchItem) => {
+    cy.get('input[placeholder="Search..."]').focus().should('be.empty').type(searchItem)
+    .then((searchBar)=>{
+        cy.intercept('GET','**/v1/core/*').as('searchPage')
+        cy.wrap(searchBar).invoke('val').should('not.be.empty')
+        cy.wait(2000)
+        cy.wrap(searchBar).type('{backspace}')
+        cy.get('[class="back-layout"]').should('have.attr', 'style', 'display: block;')
+        cy.wrap(searchBar).type('{enter}')
+        cy.wait('@searchPage')
+    })
 
-    cy.get("div.col-xs-12.col-sm-12.flex.end-xs.middle-xs.forgetpassword a")
-      .should("have.attr", "href", "/forgetpassword")
-      .as("forgetpassword")
-    
-  });
 })
 
-const login = (() => {
-  console.log('test')
-  // return cy.get('form[novalidate="novalidate"]').submit()
-  return cy.get("button").should("have.attr", "type", "button").contains("Login").click()
-  .then(($test) => {
-    return $test
-  })
+const selectCategory = ((category)=> {
+    cy.contains('[class="level-top sb-forward"]', category).click()
 })
 
-const emptyEmailError = (() =>{
-  return cy.get('@emailMessage').find('span').invoke('text')
-  .should('include', 'Field is required')
+const selectRange = ((range)=> {
+    cy.contains('[class="category-product-name"]', range).click()
 })
 
-const emptyPasswordError = (() =>{
-  cy.get('@passwordMessage').find('span').invoke('text')
-  .should('include', 'Field is required.')
+const checkSqmQuantity = (() => {
+    cy.get('.sqm')
+    .should('not.contain', 'Out of Stock')
+    .and('not.contain', 'More Stock Due')
+    .and('not.contain', 'More Stock Due */*/*')
+    .and('contain', 'in Stock')
 })
 
-const NotificationErrorLogin = (() => {
-  return cy.get('div.notifications.fixed').then((popup)=> {
-    cy.get(popup).find('div.message.p20').contains('Please fix the validation errors')
-    cy.get(popup).find('div#notificationAction1').contains('OK').click()
-  })
+const addSample = ((sample, type) => {
+    cy.intercept('GET','**/sample-options/*/*').as('sampleBooklet')
+    cy.contains('button[type="button"] span', type).click()
+    if(type == 'TOTALLY FREE CUT SAMPLE'){
+        sample++
+        cy.wait('@sampleBooklet')
+    }
 })
 
-const invalidEmailError = (() =>{
-  cy.get('@emailMessage').find('span').invoke('text')
-  .should('include', 'Please provide valid e-mail address.')
+const closeSampleBooklet = (() => {
+    cy.get('div.modal[style="display: none;"]').should('not.exist')
+    cy.get('#ModalQuickCheckout span.close').should('contain', '×').click()
 })
 
-const forgotpasswordPage = (() =>{
-  cy.url().should('eq','https://ww2.tilemountain.co.uk/forgetpassword')
+const gotoBasket = (() => {
+    cy.intercept('GET','**/checkout').as('checkout')
+    cy.get('#minicarticon').click()
+    cy.wait('@checkout')
 })
 
-const successLoginPage = (() =>{
-  cy.wait(3000)
-  cy.get('div.notifications.fixed div.message.p20').as('LoginPopup')
-  .invoke('text').should('include', 'You are logged in!')
-  cy.url().should('eq','https://ww2.tilemountain.co.uk/')
+const fillAddress = (() => {
+
+    cy.fixture("sampleAddress").then((jsonData)=> {
+        console.log('jsonData',jsonData)
+        cy.get('form [placeholder="First Name *"]').type(jsonData.Firstname)
+        cy.get('form [placeholder="Last Name *"]').type(jsonData.Lastname)
+        cy.get('form [placeholder="Postcode *"]').type(jsonData.Postcode)
+        cy.get('[value="Find Address"]').click().then(() => {
+            cy.wait(2000)
+            cy.get('select').select('TILE MOUNTAIN SHOWROOM, Brownhills Road, STOKE-ON-TRENT')
+        })
+        cy.get('form [placeholder="Email *"]').type(jsonData.Email)
+        cy.get('form [placeholder="Telephone *"]').type(jsonData.Telephone)
+    })
 })
 
-const logout = (() => {
-  cy.get(myAccount).trigger('mouseover').then((accountMenu) => {
-    cy.get('div#viewport div.py5.brdr-top-1.brdr-cl-bg-secondary a.no-underline.block.py10.px15').contains('Logout').click()
-    cy.wait(500)
-    cy.url().should('eq','https://ww2.tilemountain.co.uk')
-  })
+const submitSampleForm = (()=> {
+    cy.contains('.btn-sample-request', 'Request Samples').click()
 })
-export class SigninPage {
-  loginPage(){
-    return loginPage(accountIcon);
-  }
-  findInputfields() {
-    return findInputfields("form[novalidate]");
-  }
-  NotificationErrorLogin() {
-    return NotificationErrorLogin()
-  }
 
-  emptyEmailError(){
-    return emptyEmailError()
-  }
+const sortBy = (() => {
+    cy.get('select[name="sortby"]')
+    .select('Price: Low to high', { force: true })
+})
 
-  emptyPasswordError(){
-    return emptyPasswordError()
-  }
-
-  invalidEmailError(){
-    return invalidEmailError()
-  }
-
-  forgotpasswordPage(){
-    return forgotpasswordPage()
-  }
-  
-  login() {
-    return login()
-  }
-  successLoginPage(){
-    return successLoginPage()
-  }
-  logout(){
-    logout(myAccount)
-  }
+export class NavigationPage{
+    visitHomepage(){
+        return visitHomepage()
+    }
+    search(searchItem){
+        return search(searchItem)
+    }
+    selectCategory(category){
+        return selectCategory(category)
+    }
+    selectRange(range){
+        return selectRange(range)
+    }
+    checkSqmQuantity(){
+        return checkSqmQuantity()
+    }
+    addSample(sample, type){
+        return addSample(sample, type)
+    }
+    closeSampleBooklet(){
+        return closeSampleBooklet()
+    }
+    fillAddress(){
+        return fillAddress()
+    }
+    submitSampleForm(){
+        return submitSampleForm()
+    }
+    sortBy(){
+        return sortBy()
+    }
+    gotoBasket(){
+        return gotoBasket()
+    }
 }
 
-export const SignInPage = new SigninPage();
+export const onNavigationPage = new NavigationPage()

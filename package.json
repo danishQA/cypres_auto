@@ -1,9 +1,10 @@
 {
-  "name": "cypress",
-  "version": "6.4.0",
+  "name": "cypress_auto",
+  "version": "7.5.0",
   "description": "Cypress.io end to end testing tool",
   "private": true,
   "scripts": {
+    "test": "cypress open",
     "binary-build": "node ./scripts/binary.js build",
     "binary-deploy": "node ./scripts/binary.js deploy",
     "binary-deploy-linux": "./scripts/build-linux-binary.sh",
@@ -243,5 +244,8 @@
     "**/@types/react": "16.9.50",
     "**/jquery": "3.1.1",
     "**/pretty-format": "26.4.0"
+  },
+  "dependencies": {
+    "cypress": "7.6.0"
   }
 }

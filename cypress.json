@@ -1,5 +1,5 @@
 {
-    "baseUrl": "https://bathroommountain.co.uk/",
+    "baseUrl": "https://vhaider.tilemountain.co.uk/",
     "ignoreTestFiles" : "**/examples/*",
     "fixturesFolder": "cypress/fixtures",
     "integrationFolder": "cypress/integration",
